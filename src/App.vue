@@ -24,7 +24,18 @@
 </template>
 
 <script>
-import "aframe";
+import aframe from "aframe";
+
+aframe.registerComponent("allocate", {
+  dependencies: ["raycaster"],
+
+  tick() {
+    const intersections = this.el.components.raycaster.intersections;
+    if (intersections.length) {
+      this.el.emit("collide", intersections);
+    }
+  },
+});
 
 export default {};
 </script>
