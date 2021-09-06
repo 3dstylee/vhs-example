@@ -13,6 +13,7 @@
         position="0 -1.3 0"
         opacity="0.3"
       />
+      <a-entity gltf-model="/sofa.glb" />
     </a-scene>
   </div>
 </template>
