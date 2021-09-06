@@ -1,28 +1,16 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div>
+    <a-scene>
+      <a-assets>
+        <img id="sky_img" src="./assets/room.jpg" alt="No image" />
+      </a-assets>
+      <a-sky id="sky" src="#sky_img" />
+    </a-scene>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import "aframe";
 
-export default {
-  name: "App",
-  components: {
-    HelloWorld,
-  },
-};
+export default {};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
