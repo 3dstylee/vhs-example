@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <div id="front" class="mt-2 mx-2">
-      <v-btn fab color="primary"><v-icon>mdi-plus</v-icon></v-btn>
+      <v-btn fab color="primary" @click="isMoving = true"
+        ><v-icon>mdi-plus</v-icon></v-btn
+      >
     </div>
     <div style="height: 0">
       <a-scene vr-mode-ui="enabled: false">
@@ -14,10 +16,16 @@
           height="20"
           width="20"
           rotation="-90 0 0"
-          position="0 -1.3 0"
           opacity="0.3"
         />
-        <a-entity gltf-model="/sofa.glb" />
+        <a-entity v-if="isMoving" gltf-model="/sofa.glb" :position="position" />
+        <a-entity
+          v-if="isMoving"
+          allocate
+          cursor="rayOrigin: mouse"
+          raycaster="objects: #plane"
+          @collide="move"
+        />
       </a-scene>
     </div>
   </v-app>
@@ -37,7 +45,20 @@ aframe.registerComponent("allocate", {
   },
 });
 
-export default {};
+export default {
+  data() {
+    return {
+      position: null,
+      isMoving: false,
+    };
+  },
+
+  methods: {
+    move(e) {
+      this.position = e.detail[0].point;
+    },
+  },
+};
 </script>
 
 <style>
