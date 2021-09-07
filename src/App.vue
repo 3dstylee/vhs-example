@@ -1,9 +1,7 @@
 <template>
   <v-app>
     <div id="front" class="mt-2 mx-2">
-      <v-btn fab color="primary" @click="isMoving = true"
-        ><v-icon>mdi-plus</v-icon></v-btn
-      >
+      <v-btn fab color="primary" @click="add"><v-icon>mdi-plus</v-icon></v-btn>
     </div>
     <div style="height: 0">
       <a-scene vr-mode-ui="enabled: false">
@@ -18,13 +16,20 @@
           rotation="-90 0 0"
           opacity="0.3"
         />
-        <a-entity v-if="isMoving" gltf-model="/sofa.glb" :position="position" />
+        <template v-for="(item, index) in items">
+          <a-entity
+            :key="index"
+            gltf-model="/sofa.glb"
+            :position="item.position"
+          />
+        </template>
         <a-entity
           v-if="isMoving"
           allocate
           cursor="rayOrigin: mouse"
           raycaster="objects: #plane"
           @collide="move"
+          @mouseup="place"
         />
       </a-scene>
     </div>
@@ -48,14 +53,24 @@ aframe.registerComponent("allocate", {
 export default {
   data() {
     return {
-      position: null,
+      items: [],
       isMoving: false,
     };
   },
 
   methods: {
+    add() {
+      this.isMoving = true;
+      this.items.push({ position: { x: 0, y: 0, z: 0 } });
+    },
+
     move(e) {
-      this.position = e.detail[0].point;
+      const position = e.detail[0].point;
+      this.$set(this.items[this.items.length - 1], "position", position);
+    },
+
+    place() {
+      this.isMoving = false;
     },
   },
 };
