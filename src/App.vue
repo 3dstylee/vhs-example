@@ -18,7 +18,9 @@
         />
         <template v-for="(item, index) in items">
           <a-entity
+            :id="index"
             :key="index"
+            class="item"
             gltf-model="/sofa.glb"
             :position="item.position"
           />
@@ -30,6 +32,12 @@
           raycaster="objects: #plane"
           @collide="move"
           @mouseup="place"
+        />
+        <a-entity
+          v-else
+          cursor="rayOrigin: mouse"
+          raycaster="objects: .item"
+          @mouseup="select"
         />
       </a-scene>
     </div>
@@ -54,6 +62,7 @@ export default {
   data() {
     return {
       items: [],
+      selectedItemIndex: -1,
       isMoving: false,
     };
   },
@@ -62,15 +71,25 @@ export default {
     add() {
       this.isMoving = true;
       this.items.push({ position: { x: 0, y: 0, z: 0 } });
+      this.selectedItemIndex = this.items.length - 1;
+    },
+
+    select(e) {
+      const intersection = e.detail.intersectedEl;
+      if (!intersection) return;
+
+      this.selectedItemIndex = intersection.id;
+      this.isMoving = true;
     },
 
     move(e) {
       const position = e.detail[0].point;
-      this.$set(this.items[this.items.length - 1], "position", position);
+      this.$set(this.items[this.selectedItemIndex], "position", position);
     },
 
     place() {
       this.isMoving = false;
+      this.selectedItemIndex = -1;
     },
   },
 };
