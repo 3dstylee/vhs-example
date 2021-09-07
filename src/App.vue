@@ -14,7 +14,7 @@
           height="20"
           width="20"
           rotation="-90 0 0"
-          opacity="0.3"
+          opacity="0"
         />
         <template v-for="(item, index) in items">
           <a-entity
